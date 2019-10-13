@@ -49,6 +49,28 @@ Copy the modGRUBShell.efi file to a FAT32 formated USB drive as `EFI/BOOT/BOOTX6
 
 Reboot, and boot from your USB drive. If it dosen't work, check that UEFI booting is enabled in your BIOS, and that Secure Boot is disabled.
 
+### How do I verify that SST is enabled?
+
+The procedure described here is for configuring the BIOS to provide the ACPI/CPPC table for HWP, which only Windows requires to enable SST/HWP.
+
+Linux' intel_pstate driver does not require ACPI/CPPC to enable HWP.
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6e978b22efa1db9f6e71b24440b5f1d93e968ee3
+
+On linux, you can verify that HWP is enabled as follows:
+```
+$ dmesg | grep -i hwp
+[    1.678647] intel_pstate: HWP enabled
+```
+
+After patching my XPS 15 9550, I can also see the updated ACPI/CPPC table:
+```
+$ dmesg | grep -i hwp
+[    0.276999] ACPI: SSDT 0xFFFF92DF6B369000 00008E (v02 PmRef  Cpu0Hwp  00003000 INTL 20120913)
+[    0.277413] ACPI: SSDT 0xFFFF92DF6B38E400 000130 (v02 PmRef  HwpLvt   00003000 INTL 20120913)
+[    0.279475] ACPI: SSDT 0xFFFF92DF6B38CE00 000119 (v02 PmRef  ApHwp    00003000 INTL 20120913)
+[    1.678647] intel_pstate: HWP enabled
+```
+
 ## Acknowledgments
 
 * Check out the header of `grub-core/commands/efi/setup_var.c`
